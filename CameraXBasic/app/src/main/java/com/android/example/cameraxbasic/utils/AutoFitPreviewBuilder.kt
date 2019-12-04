@@ -40,7 +40,7 @@ class AutoFitPreviewBuilder private constructor(
         config: PreviewConfig, viewFinderRef: WeakReference<TextureView>) {
 
     /** Public instance of preview use-case which can be used by consumers of this adapter */
-    val useCase: Preview
+    val useCase: Preview by lazy { Preview(config) }
 
     /** Internal variable used to keep track of the use case's output rotation */
     private var bufferRotation: Int = 0
@@ -86,9 +86,6 @@ class AutoFitPreviewBuilder private constructor(
         // Initialize the display and rotation from texture view information
         viewFinderDisplay = viewFinder.display.displayId
         viewFinderRotation = getDisplaySurfaceRotation(viewFinder.display) ?: 0
-
-        // Initialize public use-case with the given config
-        useCase = Preview(config)
 
         // Every time the view finder is updated, recompute layout
         useCase.setOnPreviewOutputUpdateListener(Preview.OnPreviewOutputUpdateListener {
